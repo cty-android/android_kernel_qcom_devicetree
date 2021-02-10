@@ -1798,26 +1798,34 @@
 	};
 
 	tsens0: tsens@c222000 {
-		compatible = "qcom,tsens24xx";
+		compatible = "qcom,tsens26xx";
 		reg = <0xc222000 0x8>,
 			<0xc263000 0x1ff>;
 		reg-names = "tsens_srot_physical",
 				"tsens_tm_physical";
+
 		interrupts-extended = <&pdc 26 IRQ_TYPE_LEVEL_HIGH>,
-				<&pdc 28 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-names = "tsens-upper-lower", "tsens-critical";
+				<&pdc 28 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 20 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-names = "tsens-upper-lower",
+				"tsens-critical", "tsens-0C";
+		0C-sensor-num = <16>;
 		#thermal-sensor-cells = <1>;
 	};
 
 	tsens1: tsens@c223000 {
-		compatible = "qcom,tsens24xx";
+		compatible = "qcom,tsens26xx";
 		reg = <0xc223000 0x8>,
 			<0xc265000 0x1ff>;
 		reg-names = "tsens_srot_physical",
 			"tsens_tm_physical";
+
 		interrupts-extended = <&pdc 27 IRQ_TYPE_LEVEL_HIGH>,
-				<&pdc 29 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-names = "tsens-upper-lower", "tsens-critical";
+				<&pdc 29 IRQ_TYPE_LEVEL_HIGH>,
+				<&pdc 21 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-names = "tsens-upper-lower",
+				"tsens-critical", "tsens-0C";
+		0C-sensor-num = <16>;
 		#thermal-sensor-cells = <1>;
 	};
 
@@ -2477,6 +2485,7 @@
 
 			qcom,modem_qrtr {
 				qcom,glink-channels = "IPCRTR";
+				qcom,low-latency;
 				qcom,intents = <0x800  5
 						0x2000 3
 						0x4400 2>;
@@ -2515,6 +2524,7 @@
 
 			qcom,adsp_qrtr {
 				qcom,glink-channels = "IPCRTR";
+				qcom,low-latency;
 				qcom,intents = <0x800  5
 						0x2000 3
 						0x4400 2>;
@@ -3166,19 +3176,26 @@
 		governor = "performance";
 		qcom,src-dst-ports = <MSM_BUS_MASTER_NPU MSM_BUS_SLAVE_EBI_CH0>;
 		operating-points-v2 = <&suspendable_ddr_bw_opp_table>;
-		status = "disabled";
 	};
 
 	npu_npu_ddr_bwmon: qcom,npu-npu-ddr-bwmon@9960300 {
 		compatible = "qcom,bimc-bwmon4";
 		reg = <0x00060400 0x300>, <0x00060300 0x200>;
 		reg-names = "base", "global_base";
-		interrupts = <GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&gcc GCC_NPU_BWMON_CFG_AHB_CLK>,
+				<&gcc GCC_NPU_BWMON_AXI_CLK>,
+				<&gcc GCC_NPU_BWMON2_AXI_CLK>;
+		clock-names = "npu_bwmon_ahb", "npu_bwmon_axi",
+				"npu_bwmon2_axi";
+		qcom,bwmon_clks = "npu_bwmon_ahb", "npu_bwmon_axi",
+				"npu_bwmon2_axi";
+		qcom,msm_bus = <154 512>;
+		qcom,msm_bus_name = "npu_bwmon_cdsp";
+		interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
 		qcom,mport = <0>;
 		qcom,hw-timer-hz = <19200000>;
 		qcom,target-dev = <&npu_npu_ddr_bw>;
 		qcom,count-unit = <0x10000>;
-		status = "disabled";
 	};
 
 	npudsp_npu_ddr_bw: qcom,npudsp-npu-ddr-bw {
@@ -3186,19 +3203,26 @@
 		governor = "performance";
 		qcom,src-dst-ports = <MSM_BUS_MASTER_NPU MSM_BUS_SLAVE_EBI_CH0>;
 		operating-points-v2 = <&suspendable_ddr_bw_opp_table>;
-		status = "disabled";
 	};
 
 	npudsp_npu_ddr_bwmon: qcom,npudsp-npu-ddr-bwmon@70200 {
 		compatible = "qcom,bimc-bwmon4";
 		reg = <0x00070300 0x300>, <0x00070200 0x200>;
 		reg-names = "base", "global_base";
-		interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+		interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&gcc GCC_NPU_BWMON_CFG_AHB_CLK>,
+				<&gcc GCC_NPU_BWMON_AXI_CLK>,
+				<&gcc GCC_NPU_BWMON2_AXI_CLK>;
+		clock-names = "npu_bwmon_ahb", "npu_bwmon_axi",
+				"npu_bwmon2_axi";
+		qcom,bwmon_clks = "npu_bwmon_ahb", "npu_bwmon_axi",
+				"npu_bwmon2_axi";
+		qcom,msm_bus = <154 512>;
+		qcom,msm_bus_name = "npu_bwmon_cdsp";
 		qcom,mport = <0>;
 		qcom,hw-timer-hz = <19200000>;
 		qcom,target-dev = <&npudsp_npu_ddr_bw>;
 		qcom,count-unit = <0x10000>;
-		status = "disabled";
 	};
 
 	cpu0_cpu_llcc_lat: qcom,cpu0-cpu-llcc-lat {
@@ -3571,6 +3595,10 @@
 		qcom,pas-id = <23>;
 		qcom,firmware-name = "npu";
 		memory-region = <&pil_npu_mem>;
+
+		/* Outputs to npu */
+		qcom,smem-states = <&npu_smp2p_out 0>;
+		qcom,smem-state-names = "qcom,force-stop";
 	};
 
 	qfprom: qfprom@780000 {
