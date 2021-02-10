@@ -22,7 +22,7 @@
 		mipi-csi-vdd2-supply = <&L22A>;
 		rgltr-cntrl-support;
 		rgltr-min-voltage = <0 0 880000 1200000>;
-		rgltr-max-voltage = <0 0 880000 1200000>;
+		rgltr-max-voltage = <0 0 1049000 1305000>;
 		rgltr-load-current = <0 0 80000 80000>;
 		clocks = <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
 			<&camcc CAM_CC_CSIPHY0_CLK>,
@@ -57,7 +57,7 @@
 		mipi-csi-vdd2-supply = <&L22A>;
 		rgltr-cntrl-support;
 		rgltr-min-voltage = <0 0 880000 1200000>;
-		rgltr-max-voltage = <0 0 880000 1200000>;
+		rgltr-max-voltage = <0 0 1049000 1305000>;
 		rgltr-load-current = <0 0 80000 80000>;
 		clocks = <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
 			<&camcc CAM_CC_CSIPHY1_CLK>,
@@ -92,7 +92,7 @@
 		mipi-csi-vdd2-supply = <&L22A>;
 		rgltr-cntrl-support;
 		rgltr-min-voltage = <0 0 880000 1200000>;
-		rgltr-max-voltage = <0 0 880000 1200000>;
+		rgltr-max-voltage = <0 0 1049000 1305000>;
 		rgltr-load-current = <0 0 80000 80000>;
 		clocks = <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
 			<&camcc CAM_CC_CSIPHY2_CLK>,
@@ -127,7 +127,7 @@
 		mipi-csi-vdd2-supply = <&L22A>;
 		rgltr-cntrl-support;
 		rgltr-min-voltage = <0 0 880000 1200000>;
-		rgltr-max-voltage = <0 0 880000 1200000>;
+		rgltr-max-voltage = <0 0 1049000 1305000>;
 		rgltr-load-current = <0 0 80000 80000>;
 		clocks = <&camcc CAM_CC_CPHY_RX_CLK_SRC>,
 			<&camcc CAM_CC_CSIPHY3_CLK>,
@@ -512,7 +512,6 @@
 		reg = <0xac48000 0x1000>;
 		reg-names = "cpas-cdm";
 		reg-cam-base = <0x48000>;
-		cam_hw_fuse = <CAM_CPAS_SECURE_CAMERA_ENABLE 0x007801f0 23>;
 		interrupts = <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>;
 		interrupt-names = "cpas-cdm";
 		regulator-names = "camss";
@@ -812,6 +811,7 @@
 		num-a5 = <1>;
 		num-ipe = <1>;
 		num-bps = <1>;
+		icp_pc_en;
 		status = "ok";
 	};
 
