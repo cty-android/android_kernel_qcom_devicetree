@@ -375,7 +375,6 @@
 				<&apps_smmu 0xC01 0x400>,
 				<&apps_smmu 0xC40 0x400>,
 				<&apps_smmu 0xC41 0x400>;
-			qcom,iommu-faults = "non-fatal";
 			qcom,iommu-dma-addr-pool = <0x7400000 0xd8c00000>;
 			label = "ife";
 			ife_iova_mem_map: iova-mem-map {
@@ -395,7 +394,6 @@
 			iommus = <&apps_smmu 0x2040 0x400>,
 				<&apps_smmu 0x2440 0x400>;
 			label = "jpeg";
-			qcom,iommu-faults = "non-fatal";
 			qcom,iommu-dma-addr-pool = <0x7400000 0xd8c00000>;
 			jpeg_iova_mem_map: iova-mem-map {
 				/* IO region is approximately 3.4 GB */
@@ -432,7 +430,6 @@
 				<&apps_smmu 0x2420 0x400>,
 				<&apps_smmu 0x2421 0x400>;
 			label = "icp";
-			qcom,iommu-faults = "non-fatal";
 			qcom,iommu-dma-addr-pool = <0xda00000 0xace00000>;
 			icp_iova_mem_map: iova-mem-map {
 				iova-mem-region-firmware {
@@ -488,7 +485,6 @@
 			iommus = <&apps_smmu 0x20C0 0x400>,
 				<&apps_smmu 0x24C0 0x400>;
 			label = "cpas-cdm0";
-			qcom,iommu-faults = "non-fatal";
 			qcom,iommu-dma-addr-pool = <0x7400000 0xd8c00000>;
 			cpas_cdm_iova_mem_map: iova-mem-map {
 				iova-mem-region-io {
@@ -512,7 +508,6 @@
 			compatible = "qcom,msm-cam-smmu-cb";
 			iommus = <&apps_smmu 0x2080 0x400>,
 				<&apps_smmu 0x2480 0x400>;
-			qcom,iommu-faults = "non-fatal";
 			qcom,iommu-dma-addr-pool = <0x7400000 0xd8c00000>;
 			label = "fd";
 			fd_iova_mem_map: iova-mem-map {
@@ -1266,6 +1261,7 @@
 			<0 400000000 720000000 0 0>;
 		clock-cntl-level = "lowsvs", "svs", "svs_l1", "turbo";
 		src-clock-name = "ife_clk_src";
+		scl-clk-names = "ife_0_areg";
 		clock-control-debugfs = "true";
 		clock-names-option =  "ife_dsp_clk";
 		clocks-option = <&clock_camcc CAM_CC_IFE_0_DSP_CLK>;
@@ -1347,6 +1343,7 @@
 			<0 400000000 720000000 0 0>;
 		clock-cntl-level = "lowsvs", "svs", "svs_l1", "turbo";
 		src-clock-name = "ife_clk_src";
+		scl-clk-names = "ife_1_areg";
 		clock-control-debugfs = "true";
 		clock-names-option =  "ife_dsp_clk";
 		clocks-option = <&clock_camcc CAM_CC_IFE_1_DSP_CLK>;
@@ -1500,6 +1497,8 @@
 		num-ipe = <1>;
 		num-bps = <1>;
 		status = "ok";
+		icp_pc_en;
+		ipe_bps_pc_en;
 	};
 
 	cam_a5: qcom,a5@ac00000 {
@@ -1519,6 +1518,7 @@
 			"icp_ahb_clk",
 			"icp_clk_src",
 			"icp_clk";
+		src-clock-name = "icp_clk_src";
 		clocks =
 			<&clock_camcc CAM_CC_FAST_AHB_CLK_SRC>,
 			<&clock_camcc CAM_CC_ICP_AHB_CLK>,
@@ -1526,9 +1526,13 @@
 			<&clock_camcc CAM_CC_ICP_CLK>;
 
 		clock-rates =
+			<100000000 0 400000000 0>,
 			<200000000 0 480000000 0>,
+			<300000000 0 600000000 0>,
+			<400000000 0 600000000 0>,
 			<400000000 0 600000000 0>;
-		clock-cntl-level = "svs", "turbo";
+		clock-cntl-level = "lowsvs", "svs", "svs_l1",
+				"nominal", "turbo";
 		fw_name = "CAMERA_ICP.elf";
 		ubwc-ipe-fetch-cfg = <0x707b 0x7083>;
 		ubwc-ipe-write-cfg = <0x161ef 0x1620f>;
