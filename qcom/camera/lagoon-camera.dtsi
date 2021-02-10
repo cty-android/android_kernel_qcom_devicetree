@@ -505,6 +505,7 @@
 		reg = <0xac48000 0x1000>;
 		reg-names = "cpas-cdm";
 		reg-cam-base = <0x48000>;
+		cam_hw_fuse = <CAM_CPAS_SECURE_CAMERA_ENABLE 0x007801f0 23>;
 		interrupts = <GIC_SPI 469 IRQ_TYPE_EDGE_RISING>;
 		interrupt-names = "cpas-cdm";
 		regulator-names = "camss";
@@ -1257,7 +1258,7 @@
 					traffic-data =
 					<CAM_CPAS_PATH_DATA_IFE_RDI_ALL>;
 					traffic-transaction-type =
-					<CAM_CPAS_TRANSACTION_READ>;
+					<CAM_CPAS_TRANSACTION_WRITE>;
 					constituent-paths =
 					<CAM_CPAS_PATH_DATA_IFE_RDI0
 					CAM_CPAS_PATH_DATA_IFE_RDI1
@@ -1273,7 +1274,7 @@
 					traffic-data =
 					<CAM_CPAS_PATH_DATA_IFE_RDI_ALL>;
 					traffic-transaction-type =
-					<CAM_CPAS_TRANSACTION_READ>;
+					<CAM_CPAS_TRANSACTION_WRITE>;
 					constituent-paths =
 					<CAM_CPAS_PATH_DATA_IFE_RDI0
 					CAM_CPAS_PATH_DATA_IFE_RDI1
