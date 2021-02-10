@@ -68,11 +68,25 @@ dtb-$(CONFIG_ARCH_LITO) += lito-rumi.dtb \
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
-dtbo-$(CONFIG_ARCH_LAGOON) += lagoon-rumi-overlay.dtbo
+dtbo-$(CONFIG_ARCH_LAGOON) += \
+		lagoon-rumi-overlay.dtbo \
+		lagoon-mtp-overlay.dtbo \
+		lagoon-cdp-overlay.dtbo \
+		lagoon-atp-overlay.dtbo \
+		lagoon-qrd-overlay.dtbo
 
 lagoon-rumi-overlay.dtbo-base := lagoon.dtb
+lagoon-mtp-overlay.dtbo-base := lagoon.dtb
+lagoon-cdp-overlay.dtbo-base := lagoon.dtb
+lagoon-atp-overlay.dtbo-base := lagoon.dtb
+lagoon-qrd-overlay.dtbo-base := lagoon.dtb
 else
-dtb-$(CONFIG_ARCH_LAGOON) += lagoon-rumi.dtb
+dtb-$(CONFIG_ARCH_LAGOON) += \
+		lagoon-rumi.dtb \
+		lagoon-mtp.dtb \
+		lagoon-cdp.dtb \
+		lagoon-atp.dtb \
+		lagoon-qrd.dtb
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
