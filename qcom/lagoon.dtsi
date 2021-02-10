@@ -18,7 +18,7 @@
 / {
 	model = "Qualcomm Technologies, Inc. Lagoon";
 	compatible = "qcom,lagoon";
-	qcom,msm-id = <434 0x10000>;
+	qcom,msm-id = <434 0x10000>, <459 0x10000>;
 	interrupt-parent = <&intc>;
 
 	#address-cells = <2>;
@@ -533,6 +533,16 @@
 			label = "cont_splash_region";
 		};
 
+		disp_rdump_memory: disp_rdump_region@0xa0000000 {
+			reg = <0x0 0xA0000000 0x0 0x02300000>;
+			label = "disp_rdump_region";
+		};
+
+		dfps_data_memory: dfps_data_region {
+			reg = <0x0 0xA2300000 0x0 0x0100000>;
+			label = "dfps_data_region";
+		};
+
 		dump_mem: mem_dump_region {
 			compatible = "shared-dma-pool";
 			alloc-ranges = <0x0 0x00000000 0x0 0xffffffff>;
@@ -741,6 +751,23 @@
 		qcom,instance-type = "ufs";
 	};
 
+	ufsphy_mem: ufsphy_mem@1d87000 {
+		reg = <0x1d87000 0xe00>; /* PHY regs */
+		reg-names = "phy_mem";
+		#phy-cells = <0>;
+		ufs-qcom-crypto = <&ufs_ice>;
+
+		lanes-per-direction = <2>;
+
+		clock-names = "ref_clk_src",
+			"ref_clk",
+			"ref_aux_clk";
+		clocks = <&rpmhcc RPMH_QLINK_CLK>,
+			<&gcc GCC_UFS_MEM_CLKREF_CLK>,
+			<&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+
+		status = "disabled";
+	};
 
 	ufshc_mem: ufshc@1d84000 {
 		compatible = "qcom,ufshc";
@@ -770,7 +797,7 @@
 			<&gcc GCC_UFS_PHY_AHB_CLK>,
 			<&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
 			<&gcc GCC_UFS_PHY_ICE_CORE_CLK>,
-			<&rpmhcc RPMH_CXO_CLK>,
+			<&rpmhcc RPMH_QLINK_CLK>,
 			<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
 			<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
 			<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
@@ -992,10 +1019,6 @@
 				  <WAKE_TCS    3>,
 				  <CONTROL_TCS 1>;
 
-		#address-cells = <1>;
-		#size-cells = <1>;
-		ranges;
-
 		system_pm {
 			compatible = "qcom,system-pm";
 		};
@@ -1009,26 +1032,6 @@
 			compatible = "qcom,lagoon-rpmh-clk";
 			#clock-cells = <1>;
 		};
-
-		ufsphy_mem: ufsphy_mem@1d87000 {
-			reg = <0x1d87000 0xe00>; /* PHY regs */
-			reg-names = "phy_mem";
-			#phy-cells = <0>;
-			ufs-qcom-crypto = <&ufs_ice>;
-
-			lanes-per-direction = <2>;
-
-			qcom,rpmh-resource-name = "qphy.lvl";
-			clock-names = "ref_clk_src",
-				"ref_clk",
-				"ref_aux_clk";
-			clocks = <&rpmhcc RPMH_CXO_CLK>,
-				<&gcc GCC_UFS_MEM_CLKREF_CLK>,
-				<&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
-
-			status = "disabled";
-		};
-
 	};
 
 	disp_rsc: rsc@af20000 {
@@ -1043,12 +1046,15 @@
 				  <SLEEP_TCS   1>,
 				  <WAKE_TCS    1>,
 				  <CONTROL_TCS 0>;
-		status = "disabled";
 
 		msm_bus_disp_rsc {
 			compatible = "qcom,msm-bus-rsc";
 			qcom,msm-bus-id = <MSM_BUS_RSC_DISP>;
-			status = "disabled";
+		};
+
+		sde_rsc_rpmh {
+			compatible = "qcom,sde-rsc-rpmh";
+			cell-index = <0>;
 		};
 	};
 
@@ -1631,6 +1637,7 @@
 		interrupt-names = "tsens-upper-lower", "tsens-critical",
 				"tsens-0C";
 		0C-sensor-num = <16>;
+		tsens-reinit-wa;
 		#thermal-sensor-cells = <1>;
 	};
 
@@ -1646,6 +1653,7 @@
 		interrupt-names = "tsens-upper-lower", "tsens-critical",
 				"tsens-0C";
 		0C-sensor-num = <16>;
+		tsens-reinit-wa;
 		#thermal-sensor-cells = <1>;
 	};
 
@@ -2089,6 +2097,25 @@
 				qcom,intents = <0x64 64>;
 			};
 
+			qcom,msm_cdsprm_rpmsg {
+				compatible = "qcom,msm-cdsprm-rpmsg";
+				qcom,glink-channels = "cdsprmglink-apps-dsp";
+				qcom,intents = <0x20 12>;
+
+				qcom,cdsp-cdsp-l3-gov {
+					compatible = "qcom,cdsp-l3";
+					qcom,target-dev = <&cdsp_l3>;
+				};
+
+				msm_cdsp_rm: qcom,msm_cdsp_rm {
+					compatible = "qcom,msm-cdsp-rm";
+					qcom,qos-latency-us = <70>;
+					qcom,qos-maxhold-ms = <20>;
+					qcom,compute-cx-limit-en;
+					qcom,compute-priority-mode = <2>;
+				};
+			};
+
 			qcom,cdsp_glink_ssr {
 				qcom,glink-channels = "glink_ssr";
 				qcom,notify-edges = <&glink_modem>,
@@ -2290,7 +2317,7 @@
 		interrupt-parent = <&ipcc_mproc>;
 		interrupts = <IPCC_CLIENT_NPU IPCC_MPROC_SIGNAL_SMP2P
 			      IRQ_TYPE_EDGE_RISING>;
-		mboxes = <&ipcc_mproc IPCC_CLIENT_NPU IPCC_MPROC_SIGNAL_SMP2P>;
+		mboxes = <&msm_npu IPCC_CLIENT_NPU IPCC_MPROC_SIGNAL_SMP2P>;
 		qcom,local-pid = <0>;
 		qcom,remote-pid = <10>;
 
@@ -2965,13 +2992,18 @@
 		read-only;
 		ranges;
 
-		gpu_speed_bin: gpu_speed_bin@1e1 {
-			reg = <0x1e1 0x1>;
+		gpu_speed_bin: gpu_speed_bin@6015 {
+			reg = <0x6015 0x1>;
 			bits = <0 8>;
 		};
 
 		feat_conf8: feat_conf8@6024 {
 			reg = <0x6024 0x4>;
+		};
+
+		gpu_gaming_bin: gpu_gaming_bin@6026 {
+			reg = <0x6026 0x1>;
+			bits = <5 1>;
 		};
 	};
 
@@ -3452,7 +3484,7 @@
 };
 
 &gpu_gx_gdsc {
-	parent-supply = <&VDD_CX_LEVEL>;
+	parent-supply = <&VDD_GFX_LEVEL>;
 	status = "ok";
 };
 
@@ -3488,7 +3520,6 @@
 #include "pm7250b.dtsi"
 #include "pm6150l.dtsi"
 #include "pmk8350.dtsi"
-#include "pmr735b.dtsi"
 #include "lagoon-ion.dtsi"
 #include "lagoon-qupv3.dtsi"
 #include "lagoon-audio.dtsi"

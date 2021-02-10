@@ -581,7 +581,6 @@
 		cnss_wlan_mem: cnss_wlan_region {
 			compatible = "shared-dma-pool";
 			alloc-ranges = <0x0 0x00000000 0x0 0xffffffff>;
-			reusable;
 			alignment = <0x0 0x400000>;
 			size = <0x0 0x1400000>;
 		};
@@ -3387,6 +3386,8 @@
 
 		/* predefined channels, remote side is server */
 		qcom,spcom-ch-names = "sp_kernel", "sp_ssr";
+		/* rmb_err shared register physical address */
+		qcom,spcom-rmb-err-reg-addr = <0x188103c>;
 		/* sp2soc rmb shared register physical address and bmsk */
 		qcom,spcom-sp2soc-rmb-reg-addr = <0x01881020>;
 		qcom,spcom-sp2soc-rmb-initdone-bit = <24>;
@@ -3523,6 +3524,7 @@
 			compatible = "qcom,ipa-smmu-wlan-cb";
 			iommus = <&apps_smmu 0x5C1 0x0>;
 			qcom,iommu-dma = "fastmap";
+			dma-coherent;
 		};
 
 		ipa_smmu_uc: ipa_smmu_uc {

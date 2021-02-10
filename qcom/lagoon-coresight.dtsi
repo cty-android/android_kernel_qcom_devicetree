@@ -2296,6 +2296,7 @@
 		arm,buffer-size = <0x400000>;
 		arm,scatter-gather;
 
+		qcom,sw-usb;
 		coresight-name = "coresight-tmc-etr";
 		coresight-csr = <&csr>;
 
@@ -2883,6 +2884,7 @@
 		reg-names = "cti-base";
 
 		coresight-name = "coresight-cti-sierra_a6_cti";
+		status = "disabled";
 
 		clocks = <&aopcc QDSS_CLK>;
 		clock-names = "apb_pclk";
