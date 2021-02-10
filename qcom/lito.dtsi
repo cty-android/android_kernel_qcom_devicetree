@@ -526,6 +526,11 @@
 			label = "dfps_data_region";
 		};
 
+		disp_rdump_memory: disp_rdump_region@0xa0000000 {
+			reg = <0x0 0xA0000000 0x0 0x02300000>;
+			label = "disp_rdump_region";
+		};
+
 		dump_mem: mem_dump_region {
 			compatible = "shared-dma-pool";
 			alloc-ranges = <0x0 0x00000000 0x0 0xffffffff>;
@@ -2188,7 +2193,7 @@
 
 	qcom,rmtfs_sharedmem@0 {
 		compatible = "qcom,sharedmem-uio";
-		reg = <0x0 0x200000>;
+		reg = <0x0 0x280000>;
 		reg-names = "rmtfs";
 		qcom,client-id = <0x00000001>;
 		qcom,guard-memory;
@@ -3942,25 +3947,13 @@
 	status = "ok";
 };
 
-&tlmm {
-	pm8008_active: pm8008_active {
-		mux {
-			pins = "gpio44";
-			function = "gpio";
-		};
+&pm8008_8 {
+	/* PM8008 IRQ STAT */
+	interrupt-parent = <&tlmm>;
+	interrupts = <45 IRQ_TYPE_EDGE_RISING>;
 
-		config {
-			pins = "gpio44";
-			bias-pull-up;
-			output-high;
-			drive-strength = <2>;
-		};
-	};
-};
-
-&pm8008_chip {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pm8008_active>;
+	pinctrl-0 = <&pm8008_active &pm8008_interrupt>;
 };
 
 &pm8008_regulators {
