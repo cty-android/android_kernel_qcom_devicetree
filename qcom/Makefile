@@ -4,6 +4,7 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
                 kona-cdp-lcd-overlay.dtbo \
                 kona-mtp-overlay.dtbo \
                 kona-mtp-ws-overlay.dtbo \
+                kona-xr-overlay.dtbo \
                 kona-rumi-overlay.dtbo \
                 kona-qrd-overlay.dtbo \
                 kona-hdk-overlay.dtbo
@@ -12,6 +13,7 @@ kona-cdp-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-cdp-lcd-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-mtp-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-mtp-ws-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+kona-xr-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-rumi-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-qrd-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 kona-hdk-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
@@ -19,6 +21,7 @@ else
 dtb-$(CONFIG_ARCH_KONA) += kona-rumi.dtb \
         kona-mtp.dtb \
         kona-mtp-ws.dtb \
+        kona-xr.dtb \
         kona-cdp.dtb \
         kona-cdp-lcd.dtb \
         kona-qrd.dtb \
@@ -43,6 +46,7 @@ dtbo-$(CONFIG_ARCH_LITO) += lito-rumi-overlay.dtbo \
                 lito-v2-cdp-overlay.dtbo \
                 lito-atp-overlay.dtbo \
                 lito-v2-atp-overlay.dtbo \
+                lito-v2-atp-lcd-overlay.dtbo \
                 lito-qrd-overlay.dtbo \
                 lito-v2-qrd-overlay.dtbo
 
@@ -53,6 +57,7 @@ lito-cdp-overlay.dtbo-base := lito.dtb
 lito-v2-cdp-overlay.dtbo-base := lito-v2.dtb
 lito-atp-overlay.dtbo-base := lito.dtb
 lito-v2-atp-overlay.dtbo-base := lito-v2.dtb
+lito-v2-atp-lcd-overlay.dtbo-base := lito-v2.dtb
 lito-qrd-overlay.dtbo-base := lito.dtb
 lito-v2-qrd-overlay.dtbo-base := lito-v2.dtb
 else
@@ -64,6 +69,7 @@ dtb-$(CONFIG_ARCH_LITO) += lito-rumi.dtb \
                 lito-v2-mtp.dtb \
                 lito-v2-cdp.dtb \
                 lito-v2-atp.dtb \
+                lito-v2-atp-lcd.dtb \
                 lito-v2-qrd.dtb
 endif
 
@@ -71,12 +77,14 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 dtbo-$(CONFIG_ARCH_LAGOON) += \
 		lagoon-rumi-overlay.dtbo \
 		lagoon-mtp-overlay.dtbo \
+		lagoon-mtp-usbc-overlay.dtbo \
 		lagoon-cdp-overlay.dtbo \
 		lagoon-atp-overlay.dtbo \
 		lagoon-qrd-overlay.dtbo
 
 lagoon-rumi-overlay.dtbo-base := lagoon.dtb
 lagoon-mtp-overlay.dtbo-base := lagoon.dtb
+lagoon-mtp-usbc-overlay.dtbo-base := lagoon.dtb
 lagoon-cdp-overlay.dtbo-base := lagoon.dtb
 lagoon-atp-overlay.dtbo-base := lagoon.dtb
 lagoon-qrd-overlay.dtbo-base := lagoon.dtb
@@ -84,6 +92,7 @@ else
 dtb-$(CONFIG_ARCH_LAGOON) += \
 		lagoon-rumi.dtb \
 		lagoon-mtp.dtb \
+		lagoon-mtp-usbc.dtb \
 		lagoon-cdp.dtb \
 		lagoon-atp.dtb \
 		lagoon-qrd.dtb
