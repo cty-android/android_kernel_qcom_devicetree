@@ -25,6 +25,7 @@
 				"lut_clk";
 		clock-rate = <0 0 0 300000000 19200000 300000000>;
 		clock-max-rate = <0 0 0 560000000 19200000 560000000>;
+		qcom,dss-cx-ipeak = <&cx_ipeak_lm 4>;
 
 		/* interrupt config */
 		interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
@@ -136,6 +137,7 @@
 		qcom,sde-vbif-qos-rt-remap = <3 3 4 4 5 5 6 6>;
 		qcom,sde-vbif-qos-nrt-remap = <3 3 3 3 3 3 3 3>;
 		qcom,sde-vbif-qos-cwb-remap = <3 3 4 4 5 5 6 3>;
+		qcom,sde-vbif-qos-lutdma-remap = <3 3 3 3 4 4 4 4>;
 
 		/* macrotile & macrotile-qseed has the same configs */
 		qcom,sde-danger-lut = <0x0000ffff 0x0000ffff
@@ -166,6 +168,7 @@
 
 		qcom,sde-qos-cpu-mask = <0x3>;
 		qcom,sde-qos-cpu-dma-latency = <300>;
+		qcom,sde-qos-cpu-irq-latency = <300>;
 
 		/* offsets are relative to "mdp_phys + qcom,sde-off */
 
