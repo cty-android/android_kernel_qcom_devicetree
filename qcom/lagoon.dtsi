@@ -1145,16 +1145,6 @@
 				<DCC_READ 0x0c202244 1 0>,
 				<DCC_READ 0x18300000 1 0>,
 				<DCC_READ 0x1829208c 1 0>,
-				<DCC_WRITE 0x1829209c 0x78 0>,
-				<DCC_WRITE 0x1829209c 0x0  0>,
-				<DCC_WRITE 0x18292048 0x1  0>,
-				<DCC_WRITE 0x18292090 0x0  0>,
-				<DCC_WRITE 0x18292090 0x25 0>,
-				<DCC_READ 0x18292098 1 0>,
-				<DCC_WRITE 0x18292048 0x1d 0>,
-				<DCC_WRITE 0x18292090 0x0  0>,
-				<DCC_WRITE 0x18292090 0x25 0>,
-				<DCC_READ 0x18292098 1 0>,
 				<DCC_READ 0x1832102c 1 0>,
 				<DCC_READ 0x18321044 1 0>,
 				<DCC_READ 0x18321700 1 0>,
@@ -1226,8 +1216,9 @@
 				<DCC_READ 0x9698134 1 0>,
 				<DCC_READ 0x9698138 1 0>,
 				<DCC_READ 0x969813c 1 0>,
-				<DCC_READ 0x16e0000 1 0>,
-				<DCC_READ 0x16e0004 1 0>,
+				<DCC_WRITE 0x11100c 1 0>,
+				<DCC_WRITE 0x110144 1 0>,
+				<DCC_WRITE 0x11102c 1 0>,
 				<DCC_READ 0x16e0300 1 0>,
 				<DCC_READ 0x16e0400 1 0>,
 				<DCC_READ 0x16e0408 1 0>,
@@ -1285,10 +1276,6 @@
 				<DCC_READ 0x1620034 1 0>,
 				<DCC_READ 0x1620038 1 0>,
 				<DCC_READ 0x162003c 1 0>,
-				<DCC_READ 0x1620100 1 0>,
-				<DCC_READ 0x1620104 1 0>,
-				<DCC_READ 0x1620108 1 0>,
-				<DCC_READ 0x1620110 1 0>,
 				<DCC_READ 0x1620200 1 0>,
 				<DCC_READ 0x1620204 1 0>,
 				<DCC_READ 0x1620240 1 0>,
@@ -3187,6 +3174,8 @@
 			qcom,cpulist = <&CPU6 &CPU7>;
 			qcom,target-dev = <&cpu6_l3>;
 			qcom,cachemiss-ev = <0x17>;
+			qcom,access-ev = <0x2B>;
+			qcom,wb-ev = <0x18>;
 			qcom,core-dev-table =
 				< 1036800  556800000 >,
 				< 1248000  806400000 >,
