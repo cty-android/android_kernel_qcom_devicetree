@@ -138,10 +138,10 @@
 		};
 	};
 
-	tpdm_lpass: tpdm@8a26000 {
+	tpdm_lpass_lpi: tpdm@8a26000 {
 		compatible = "qcom,coresight-dummy";
 
-		coresight-name = "coresight-tpdm-lpass";
+		coresight-name = "coresight-tpdm-lpass-lpi";
 		qcom,dummy-source;
 
 		port {
@@ -1086,7 +1086,6 @@
 
 		iommus = <&apps_smmu 0x0180 0>,
 			<&apps_smmu 0x0160 0>;
-		qcom,iommu-dma = "bypass";
 
 		#address-cells = <1>;
 		#size-cells = <1>;
