@@ -77,6 +77,7 @@
 			dynamic-power-coefficient = <100>;
 			qcom,freq-domain = <&cpufreq_hw 0 4>;
 			next-level-cache = <&L2_0>;
+			#cooling-cells = <2>;
 			L2_0: l2-cache {
 			      compatible = "arm,arch-cache";
 			      cache-level = <2>;
@@ -150,6 +151,7 @@
 			dynamic-power-coefficient = <520>;
 			qcom,freq-domain = <&cpufreq_hw 1 4>;
 			next-level-cache = <&L2_4>;
+			#cooling-cells = <2>;
 			L2_4: l2-cache {
 			      compatible = "arm,arch-cache";
 			      cache-level = <2>;
@@ -201,6 +203,7 @@
 			dynamic-power-coefficient = <552>;
 			qcom,freq-domain = <&cpufreq_hw 2 4>;
 			next-level-cache = <&L2_7>;
+			#cooling-cells = <2>;
 			L2_7: l2-cache {
 			      compatible = "arm,arch-cache";
 			      cache-level = <2>;
@@ -515,6 +518,19 @@
 	dfps_data_memory: dfps_data_memory {
 		reg = <0x0 0xe3300000 0x0 0x0100000>;
 		label = "dfps_data_memory";
+	};
+
+	memshare_mem: memshare_region {
+		compatible = "shared-dma-pool";
+		no-map;
+		/*
+		 * Memory shared with modem needs to be outside of
+		 * the CLADE address space, which begins at
+		 * 0xE0000000 and spans 512 MB.
+		 */
+		alloc-ranges = <0x0 0x00000000 0x0 0xdfffffff>;
+		alignment = <0x0 0x100000>;
+		size = <0x0 0x800000>;
 	};
 
 	cnss_wlan_mem: cnss_wlan_region {
@@ -942,6 +958,34 @@
 		status = "ok";
 	};
 
+	qcom,memshare {
+		compatible = "qcom,memshare";
+
+		qcom,client_1 {
+			compatible = "qcom,memshare-peripheral";
+			qcom,peripheral-size = <0x0>;
+			qcom,client-id = <0>;
+			qcom,allocate-boot-time;
+			label = "modem";
+		};
+
+		qcom,client_2 {
+			compatible = "qcom,memshare-peripheral";
+			qcom,peripheral-size = <0x0>;
+			qcom,client-id = <2>;
+			label = "modem";
+		};
+
+		qcom,client_3 {
+			compatible = "qcom,memshare-peripheral";
+			qcom,peripheral-size = <0x500000>;
+			memory-region = <&memshare_mem>;
+			qcom,client-id = <1>;
+			qcom,allocate-on-request;
+			label = "modem";
+		};
+	};
+
 	clocks {
 		xo_board: xo-board {
 			compatible = "fixed-clock";
@@ -1224,6 +1268,7 @@
 		qcom,iommu-dma = "fastmap";
 		qcom,iommu-faults = "stall-disable", "HUPCF", "non-fatal";
 		qcom,iommu-dma-addr-pool = <0xa0000000 0x10000000>;
+		qcom,iommu-geometry = <0xa0000000 0x10010000>;
 		qcom,wlan-msa-fixed-region = <&wlan_fw_mem>;
 		qcom,cmd_db_name = "smpb7";
 		cnss-daemon-support;
