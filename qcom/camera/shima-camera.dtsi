@@ -757,7 +757,7 @@
 		clock-names-option =  "ife_dsp_clk";
 		clocks-option = <&camcc CAM_CC_IFE_0_DSP_CLK>;
 		clock-rates-option = <720000000>;
-		ubwc-static-cfg = <0x1026 0x1036>;
+		ubwc-static-cfg = <0x1016 0x1026>;
 		cam_hw_pid = < 28 4 16 8 >;
 		status = "ok";
 	};
@@ -844,7 +844,7 @@
 		clock-names-option =  "ife_dsp_clk";
 		clocks-option = <&camcc CAM_CC_IFE_1_DSP_CLK>;
 		clock-rates-option = <720000000>;
-		ubwc-static-cfg = <0x1026 0x1036>;
+		ubwc-static-cfg = <0x1016 0x1026>;
 		cam_hw_pid = < 29 5 17 9 >;
 		status = "ok";
 	};
@@ -928,7 +928,7 @@
 		src-clock-name = "ife_clk_src";
 		scl-clk-names = "ife_2_areg";
 		clock-control-debugfs = "true";
-		ubwc-static-cfg = <0x1026 0x1036>;
+		ubwc-static-cfg = <0x1016 0x1026>;
 		cam_hw_pid = < 23 6 18 10>;
 		status = "ok";
 	};
@@ -1177,9 +1177,9 @@
 		clock-cntl-level = "lowsvs", "svs", "svs_l1", "nominal",
 			"turbo";
 		fw_name = "CAMERA_ICP.elf";
-		ubwc-ipe-fetch-cfg = <0x707b 0x7083>;
+		ubwc-ipe-fetch-cfg = <0x7073 0x707b>;
 		ubwc-ipe-write-cfg = <0x161cf 0x161ef>;
-		ubwc-bps-fetch-cfg = <0x707b 0x7083>;
+		ubwc-bps-fetch-cfg = <0x7073 0x707b>;
 		ubwc-bps-write-cfg = <0x161cf 0x161ef>;
 		status = "ok";
 	};
@@ -1323,10 +1323,17 @@
 		camnoc-axi-min-ib-bw = <3000000000>;
 		regulator-names = "camss-vdd";
 		camss-vdd-supply = <&cam_cc_titan_top_gdsc>;
+		/*
+		 * GCC throttle rt/nrt clock is added as a workaround in shima.
+		 * Normally, This clock should be turned on/off along with
+		 * GCC HF/SF clock
+		 */
 		clock-names =
 			"gcc_ahb_clk",
 			"gcc_axi_hf_clk",
 			"gcc_axi_sf_clk",
+			"gcc_rt_throttle_clk",
+			"gcc_nrt_throttle_clk",
 			"slow_ahb_clk_src",
 			"cpas_ahb_clk",
 			"cpas_core_ahb_clk",
@@ -1336,6 +1343,8 @@
 			<&gcc GCC_CAMERA_AHB_CLK>,
 			<&gcc GCC_CAMERA_HF_AXI_CLK>,
 			<&gcc GCC_CAMERA_SF_AXI_CLK>,
+			<&gcc GCC_TITAN_RT_THROTTLE_CORE_CLK>,
+			<&gcc GCC_TITAN_NRT_THROTTLE_CORE_CLK>,
 			<&camcc CAM_CC_SLOW_AHB_CLK_SRC>,
 			<&camcc CAM_CC_CPAS_AHB_CLK>,
 			<&camcc CAM_CC_CORE_AHB_CLK>,
@@ -1343,12 +1352,12 @@
 			<&camcc CAM_CC_CAMNOC_AXI_CLK>;
 		src-clock-name = "camnoc_axi_clk_src";
 		clock-rates =
-			<0 0 0 0 0 0 0 0>,
-			<0 0 0 80000000 0 0 300000000 0>,
-			<0 0 0 80000000 0 0 300000000 0>,
-			<0 0 0 80000000 0 0 342855555 0>,
-			<0 0 0 80000000 0 0 400000000 0>,
-			<0 0 0 80000000 0 0 400000000 0>;
+			<0 0 0 0 0 0 0 0 0 0>,
+			<0 0 0 0 0 80000000 0 0 300000000 0>,
+			<0 0 0 0 0 80000000 0 0 300000000 0>,
+			<0 0 0 0 0 80000000 0 0 342855555 0>,
+			<0 0 0 0 0 80000000 0 0 400000000 0>,
+			<0 0 0 0 0 80000000 0 0 400000000 0>;
 		clock-cntl-level = "suspend", "lowsvs", "svs", "svs_l1",
 			"nominal", "turbo";
 		control-camnoc-axi-clk;
