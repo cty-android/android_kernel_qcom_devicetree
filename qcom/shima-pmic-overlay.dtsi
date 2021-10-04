@@ -16,7 +16,9 @@
 			power-source = <1>;
 		};
 	};
+};
 
+&pmr735b_gpios {
 	pmr735b_smb_skin {
 		pmr735b_smb_skin_default: pmr735b_smb_skin_default {
 			pins = "gpio3";
@@ -48,8 +50,7 @@
 };
 
 &pmk8350_vadc {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pmr735b_smb_skin_default>;
+	status = "disabled";
 
 	/delete-node/ pmr735a_ref_gnd;
 	/delete-node/ pmr735a_vref_1p25;
@@ -105,6 +106,7 @@
 };
 
 &pmk8350_adc_tm {
+	status = "disabled";
 	io-channels = <&pmk8350_vadc PM8350_ADC7_AMUX_THM1_100K_PU>,
 			<&pmk8350_vadc PM8350_ADC7_AMUX_THM2_100K_PU>,
 			<&pmk8350_vadc PM8350_ADC7_AMUX_THM4_100K_PU>,
@@ -498,4 +500,12 @@
 &pmr735b_tz {
 	io-channels = <&pmk8350_vadc PMR735B_ADC7_DIE_TEMP>;
 	io-channel-names = "thermal";
+};
+
+&soc {
+	reboot_reason {
+		compatible = "qcom,reboot-reason";
+		nvmem-cells = <&restart_reason>;
+		nvmem-cell-names = "restart_reason";
+	};
 };
