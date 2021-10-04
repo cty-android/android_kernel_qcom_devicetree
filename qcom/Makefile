@@ -76,6 +76,12 @@ dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+dtbo-$(CONFIG_ARCH_SCUBA) += scuba-iot-idp-overlay.dtbo
+
+scuba-iot-idp-overlay.dtbo-base := scuba-iot.dtb
+endif
+
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 dtbo-$(CONFIG_ARCH_HOLI) += holi-rumi-overlay.dtbo \
 	holi-mtp-overlay.dtbo \
 	holi-cdp-overlay.dtbo \
@@ -171,7 +177,16 @@ endif
 
 dtb-$(CONFIG_ARCH_SDXLEMUR) += sdxlemur-rumi.dtb \
 	sdxlemur-cdp.dtb \
-	sdxlemur-mtp.dtb
+	sdxlemur-mtp.dtb \
+	sdxlemur-mtp-mbb.dtb \
+	sdxlemur-mtp-cpe.dtb \
+	sdxlemur-mtp-mbb-ntn3-pcie.dtb \
+	sdxlemur-mtp-mbb-pcie-ep.dtb \
+	sdxlemur-mtp-mbb-pcie-rc-ep.dtb \
+	sdxlemur-mtp-mbb.dtb \
+	sdxlemur-rcm-pcie-ep.dtb \
+	sdxlemur-rcm-rc.dtb
+
 
 ifeq ($(CONFIG_ARCH_SHIMA), y)
 ifeq ($(CONFIG_ARCH_QTI_VM), y)

@@ -99,20 +99,19 @@
 	vdd-hba-fixed-regulator;
 
 	vcc-supply = <&L7B>;
-	vcc-voltage-level = <2950000 2960000>;
+	vcc-voltage-level = <2504000 2960000>;
 	vcc-low-voltage-sup;
 	vcc-max-microamp = <800000>;
 
 	vccq-supply = <&L9B>;
 	vccq-max-microamp = <900000>;
-	vccq-min-microamp = <0>;
+	vccq-min-microamp = <10000>;
 
 	vccq2-supply = <&S10B>;
 	vccq2-voltage-level = <1800000 1800000>;
 
 	qcom,vddp-ref-clk-supply = <&L9B>;
-	qcom,vddp-ref-clk-max-microamp = <100>;
-	qcom,vddp-ref-clk-min-microamp = <0>;
+	qcom,vddp-ref-clk-max-microamp = <10000>;
 	status = "ok";
 };
 
@@ -185,11 +184,110 @@
 	status = "ok";
 };
 
+&pm8350b_amoled_ecm {
+	display-panels = <&dsi_r66451_amoled_cmd
+			&dsi_r66451_amoled_video>;
+};
+
 &battery_charger {
 	qcom,thermal-mitigation = <10000000 9500000 9000000 8500000 8000000
 				7500000 7000000 6500000 6000000 5500000
 				5000000 4500000 4000000 3500000 3000000
 				2500000 2000000 1500000 1000000 500000>;
+	qcom,wireless-fw-name = "idt9412.bin";
+};
+
+&thermal_zones {
+	quiet-therm-step {
+		polling-delay-passive = <2000>;
+		polling-delay = <0>;
+		thermal-governor = "step_wise";
+		thermal-sensors = <&pmk8350_adc_tm PM8350_ADC7_AMUX_THM1_100K_PU>;
+
+		trips {
+			quiet_gpu_trip: quiet-gpu-trip {
+				temperature = <45000>;
+				hysteresis = <0>;
+				type = "passive";
+			};
+
+			quiet_cpu4_trip: quiet-cpu4-trip {
+				temperature = <46000>;
+				hysteresis = <0>;
+				type = "passive";
+			};
+
+			quiet_cpu7_trip: quiet-cpu7-trip {
+				temperature = <48000>;
+				hysteresis = <0>;
+				type = "passive";
+			};
+
+			quiet_cpu0_trip: quiet-cpu0-trip {
+				temperature = <50000>;
+				hysteresis = <0>;
+				type = "passive";
+			};
+
+			quiet_cx_trip: quiet-cx-trip {
+				temperature = <55000>;
+				hysteresis = <5000>;
+				type = "passive";
+			};
+		};
+
+		cooling-maps {
+			gpu-cdev0 {
+				trip = <&quiet_gpu_trip>;
+				/* throttle to 443000000Hz */
+				cooling-device = <&msm_gpu THERMAL_NO_LIMIT
+						(THERMAL_MAX_LIMIT-1)>;
+			};
+
+			gpu-cdev1 {
+				trip = <&quiet_cx_trip>;
+				/* throttle to 285000000Hz */
+				cooling-device = <&msm_gpu THERMAL_MAX_LIMIT
+						THERMAL_MAX_LIMIT>;
+			};
+
+			cpufreq0-cdev {
+				trip = <&quiet_cpu0_trip>;
+				/* throttle to 1516800KHz */
+				cooling-device = <&CPU0 THERMAL_NO_LIMIT
+						(THERMAL_MAX_LIMIT-7)>;
+			};
+
+			cpufreq4-cdev {
+				trip = <&quiet_cpu4_trip>;
+				/* throttle to 1651200KHz */
+				cooling-device = <&CPU4 THERMAL_NO_LIMIT
+						(THERMAL_MAX_LIMIT-5)>;
+			};
+
+			cpufreq7-cdev {
+				trip = <&quiet_cpu7_trip>;
+				/* throttle to 1862400KHz */
+				cooling-device = <&CPU7 THERMAL_NO_LIMIT
+						(THERMAL_MAX_LIMIT-5)>;
+			};
+
+			cdsp-cdev {
+				trip = <&quiet_cx_trip>;
+				cooling-device = <&cdsp_sw 5 5>;
+			};
+
+			modem-pa-cdev {
+				trip = <&quiet_cx_trip>;
+				cooling-device = <&modem_pa 3 3>;
+			};
+
+			modem-tj-cdev {
+				trip = <&quiet_cx_trip>;
+				cooling-device = <&modem_tj 3 3>;
+			};
+		};
+	};
 };
 
 &qupv3_se10_i2c {
