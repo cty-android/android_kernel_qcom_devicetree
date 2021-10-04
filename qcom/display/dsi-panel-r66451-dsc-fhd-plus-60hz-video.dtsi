@@ -1,11 +1,13 @@
 &mdss_mdp {
 	dsi_r66451_amoled_60hz_video: qcom,mdss_dsi_visionox_r66451_fhd_plus_60hz_video {
 		qcom,mdss-dsi-panel-name =
-			"r66451 amoled video mode dsi visionox 60Hz panel with DSC";
+			"r66451 amoled video mode dsi visionox panel with DSC";
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
 		qcom,mdss-dsi-panel-physical-type = "oled";
 		qcom,dsi-ctrl-num = <0>;
 		qcom,dsi-phy-num = <0>;
+		qcom,dsi-sec-ctrl-num = <1>;
+		qcom,dsi-sec-phy-num = <1>;
 		qcom,mdss-dsi-virtual-channel-id = <0>;
 		qcom,mdss-dsi-stream = <0>;
 		qcom,mdss-dsi-bpp = <24>;

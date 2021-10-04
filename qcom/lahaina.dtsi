@@ -573,7 +573,8 @@
 		qcom,apps-ch-pipes = <0x0>;
 		qcom,ea-pc = <0x350>;
 		iommus = <&apps_smmu 0x1826 0x0>;
-		qcom,iommu-dma-addr-pool = <0x40000000 0xc0000000>;
+		qcom,iommu-dma-addr-pool = <0x40000000 0x10000000>;
+		qcom,iommu-geometry = <0x40000000 0x10000000>;
 		qcom,iommu-dma = "fastmap";
 		status = "ok";
 
@@ -2346,7 +2347,6 @@
 		reg-name = "cc_base";
 		vdd_mm-supply = <&VDD_MM_LEVEL>;
 		vdd_mx-supply = <&VDD_MXA_LEVEL>;
-		interconnects = <&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_VENUS_CFG>;
 		clocks = <&clock_gcc GCC_VIDEO_AHB_CLK>;
 		clock-names = "iface";
 		#clock-cells = <1>;
@@ -2359,7 +2359,6 @@
 		reg-names = "cc_base";
 		vdd_mm-supply = <&VDD_MM_LEVEL>;
 		vdd_mx-supply = <&VDD_MXA_LEVEL>;
-		interconnects = <&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_CAMERA_CFG>;
 		clocks = <&clock_gcc GCC_CAMERA_AHB_CLK>;
 		clock-names = "iface";
 		#clock-cells = <1>;
@@ -2371,7 +2370,6 @@
 		reg = <0xaf00000 0x20000>;
 		reg-name = "cc_base";
 		vdd_mm-supply = <&VDD_MM_LEVEL>;
-		interconnects = <&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_DISPLAY_CFG>;
 		clocks = <&clock_gcc GCC_DISP_AHB_CLK>;
 		clock-names = "iface";
 		#clock-cells = <1>;
@@ -4246,6 +4244,12 @@
 						0x4400 2>;
 			};
 
+			qcom,msm_fastrpc_rpmsg {
+				compatible = "qcom,msm-fastrpc-rpmsg";
+				qcom,glink-channels = "fastrpcglink-apps-dsp";
+				qcom,intents = <0x64 64>;
+			};
+
 			qcom,adsp_glink_ssr {
 				qcom,glink-channels = "glink_ssr";
 				qcom,notify-edges = <&glink_slpi>,
@@ -4286,6 +4290,12 @@
 						0x4400 2>;
 			};
 
+			qcom,msm_fastrpc_rpmsg {
+				compatible = "qcom,msm-fastrpc-rpmsg";
+				qcom,glink-channels = "fastrpcglink-apps-dsp";
+				qcom,intents = <0x64 64>;
+			};
+
 			qcom,slpi_glink_ssr {
 				qcom,glink-channels = "glink_ssr";
 				qcom,notify-edges = <&glink_adsp>,
@@ -4312,6 +4322,12 @@
 				qcom,intents = <0x800  5
 						0x2000 3
 						0x4400 2>;
+			};
+
+			qcom,msm_fastrpc_rpmsg {
+				compatible = "qcom,msm-fastrpc-rpmsg";
+				qcom,glink-channels = "fastrpcglink-apps-dsp";
+				qcom,intents = <0x64 64>;
 			};
 
 			qcom,msm_cdsprm_rpmsg {
@@ -4406,6 +4422,8 @@
 		vdd_mss-supply = <&VDD_MODEM_LEVEL>;
 		qcom,vdd_mss-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 100000>;
 		qcom,proxy-reg-names = "vdd_cx", "vdd_mss";
+
+		interconnects = <&mc_virt MASTER_LLCC &mc_virt SLAVE_EBI1>;
 
 		qcom,firmware-name = "modem";
 		memory-region = <&pil_modem_mem>;
@@ -5337,6 +5355,7 @@
 		      <0xb2e5510 0x690>;
 		reg-names = "smmu_iova_ipa", "tcs_cmd";
 		wlan-en-gpio = <&tlmm 64 0>;
+		qcom,bt-en-gpio = <&tlmm 65 0>;
 		pinctrl-names = "wlan_en_active", "wlan_en_sleep";
 		pinctrl-0 = <&cnss_wlan_en_active>;
 		pinctrl-1 = <&cnss_wlan_en_sleep>;
@@ -5346,6 +5365,7 @@
 		/* RPMH_PDC_WLAN_RF_TCS<6>_CMD<2> offset */
 		qcom,tcs_offset_int_pow_amp_vreg = <0x4D0>;
 		use-pm-domain;
+		cnss-enable-self-recovery;
 
 		vdd-wlan-aon-supply = <&S2E>;
 		qcom,vdd-wlan-aon-config = <950000 952000 0 0 1>;
@@ -5599,6 +5619,7 @@
 		/* offset=(0xC8*6) + (0x10*2) */
 		qcom,tcs_offset_ipa = <0x4D0>;
 		qcom,bt-reset-gpio = <&tlmm 65 0>; /* BT_EN */
+		qcom,wl-reset-gpio = <&tlmm 64 0>; /* WL_EN */
 		qcom,bt-sw-ctrl-gpio = <&tlmm 153 0>; /* SW_CTRL */
 		qcom,bt-vdd-aon-supply = <&S11B>;
 		qcom,bt-vdd-dig-supply = <&S11B>;
