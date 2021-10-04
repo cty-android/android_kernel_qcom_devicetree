@@ -7,6 +7,7 @@ dtbo-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi-overlay.dtbo \
 	lahaina-qrd-overlay.dtbo \
 	lahaina-atp-overlay.dtbo \
 	lahaina-hdk-overlay.dtbo \
+	lahaina-hhg-overlay.dtbo \
 	lahaina-qrd-hsp-overlay.dtbo \
 	lahaina-qrd-module-overlay.dtbo \
 	lahainap-mtp-overlay.dtbo \
@@ -15,7 +16,10 @@ dtbo-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi-overlay.dtbo \
 	lahainap-qrd-overlay.dtbo \
 	lahaina-cdp-v2.2-overlay.dtbo \
 	lahaina-mtp-v2-overlay.dtbo \
-	lahaina-mtp-v2.1-overlay.dtbo
+	lahaina-mtp-v2.1-overlay.dtbo \
+	lahaina-mtp-hsp-pro-overlay.dtbo \
+	lahaina-cdp-hsp-pro-overlay.dtbo \
+	lahaina-qrd-hsp-pro-overlay.dtbo
 
 lahaina-rumi-overlay.dtbo-base := lahaina.dtb
 lahaina-mtp-hsp-overlay.dtbo-base := lahaina.dtb
@@ -23,6 +27,7 @@ lahaina-mtp-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-cdp-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-atp-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-hdk-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
+lahaina-hhg-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-qrd-hsp-overlay.dtbo-base := lahaina.dtb
 lahaina-qrd-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-qrd-module-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
@@ -35,6 +40,12 @@ lahaina-cdp-v2.2-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
 lahaina-mtp-v2-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
 					lahaina-v2.1.dtb
 lahaina-mtp-v2.1-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
+					lahaina-v2.1.dtb
+lahaina-mtp-hsp-pro-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
+					lahaina-v2.1.dtb
+lahaina-cdp-hsp-pro-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
+					lahaina-v2.1.dtb
+lahaina-qrd-hsp-pro-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb \
 					lahaina-v2.1.dtb
 else
 dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
@@ -65,6 +76,7 @@ dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
 	lahaina-v2.1-cdp.dtb \
 	lahaina-v2.1-atp.dtb \
 	lahaina-v2.1-hdk.dtb \
+	lahaina-v2.1-hhg.dtb \
 	lahaina-v2.1-qrd.dtb \
 	lahaina-v2.1-qrd-module.dtb \
 	lahainap-v2.1-mtp.dtb \
@@ -72,7 +84,10 @@ dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
 	lahainap-v2.1-atp.dtb \
 	lahainap-v2.1-qrd.dtb \
 	lahaina-mtp-v2.dtb \
-	lahaina-mtp-v2.1.dtb
+	lahaina-mtp-v2.1.dtb \
+	lahaina-v2.1-mtp-hsp-pro.dts \
+	lahaina-v2.1-cdp-hsp-pro.dts \
+	lahaina-v2.1-qrd-hsp-pro.dts
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
@@ -139,17 +154,33 @@ dtbo-$(CONFIG_ARCH_YUPIK) +=    \
 	yupik-rumi-overlay.dtbo \
 	yupik-idp-overlay.dtbo \
 	yupik-atp-overlay.dtbo \
-	yupik-idps-digital-mics-overlay.dtbo
+	yupik-qrd-overlay.dtbo \
+	yupik-idps-digital-mics-overlay.dtbo \
+	yupikp-idp-overlay.dtbo \
+	yupikp-atp-overlay.dtbo \
+	yupikp-qrd-overlay.dtbo \
+	yupikp-idps-digital-mics-overlay.dtbo
+
 
 yupik-rumi-overlay.dtbo-base := yupik.dtb
 yupik-idp-overlay.dtbo-base := yupik.dtb
 yupik-atp-overlay.dtbo-base := yupik.dtb
+yupik-qrd-overlay.dtbo-base := yupik.dtb
 yupik-idps-digital-mics-overlay.dtbo-base := yupik.dtb
+yupikp-idp-overlay.dtbo-base := yupikp.dtb
+yupikp-atp-overlay.dtbo-base := yupikp.dtb
+yupikp-qrd-overlay.dtbo-base := yupikp.dtb
+yupikp-idps-digital-mics-overlay.dtbo-base := yupikp.dtb
 else
 dtb-$(CONFIG_ARCH_YUPIK) += yupik-rumi.dtb \
 	yupik-idp.dtb \
 	yupik-atp.dtb \
-	yupik-idps-digital-mics.dtb
+	yupik-qrd.dtb \
+	yupik-idps-digital-mics.dtb \
+	yupikp-idp.dtb \
+	yupikp-atp.dtb \
+	yupikp-qrd.dtb \
+	yupikp-idps-digital-mics.dtb
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
@@ -182,6 +213,36 @@ dtb-$(CONFIG_ARCH_SA8155)       += sa8155-adp-star.dtb \
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+        dtbo-$(CONFIG_ARCH_SA6155) += \
+		sa6155-adp-star-overlay.dtbo \
+		sa6155p-adp-star-overlay.dtbo \
+		sa6155p-adp-star-lpass-overlay.dtbo \
+		sa6155-adp-air-overlay.dtbo \
+		sa6155p-adp-air-overlay.dtbo \
+		sa6155p-v2-adp-star-overlay.dtbo \
+		sa6155p-v2-adp-air-overlay.dtbo \
+		sa6155p-v2-adp-air-lpass-overlay.dtbo
+
+sa6155-adp-star-overlay.dtbo-base := sa6155.dtb
+sa6155p-adp-star-overlay.dtbo-base := sa6155p.dtb
+sa6155p-adp-star-lpass-overlay.dtbo-base :=sa6155p.dtb
+sa6155p-v2-adp-star-overlay.dtbo-base := sa6155p.dtb
+sa6155-adp-air-overlay.dtbo-base := sa6155.dtb
+sa6155p-adp-air-overlay.dtbo-base := sa6155p.dtb
+sa6155p-v2-adp-air-overlay.dtbo-base := sa6155p.dtb
+sa6155p-v2-adp-air-lpass-overlay.dtbo-base := sa6155p.dtb
+else
+dtb-$(CONFIG_ARCH_SA6155)       += sa6155-adp-star.dtb \
+	sa6155p-adp-star.dtb \
+	sa6155p-adp-star-lpass.dtb \
+	sa6155-adp-air.dtb \
+	sa6155p-adp-air.dtb \
+	sa6155p-v2-adp-star.dtb \
+	sa6155p-v2-adp-air.dtb \
+	sa6155p-v2-adp-air-lpass.dtb
+endif
+
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 	dtbo-$(CONFIG_ARCH_SA8195) += \
 		sa8195p-adp-star-overlay.dtbo \
 		sa8195p-v2-adp-air-overlay.dtbo
@@ -209,12 +270,22 @@ dtb-$(CONFIG_ARCH_SDXLEMUR) += sdxlemur-rumi.dtb \
 	sdxlemur-mtp.dtb \
 	sdxlemur-mtp-mbb.dtb \
 	sdxlemur-mtp-cpe.dtb \
+	sdxlemur-mtp-mbb-emmc.dtb \
 	sdxlemur-mtp-mbb-ntn3-pcie.dtb \
 	sdxlemur-mtp-mbb-pcie-ep.dtb \
 	sdxlemur-mtp-mbb-pcie-rc-ep.dtb \
 	sdxlemur-mtp-mbb.dtb \
 	sdxlemur-rcm-pcie-ep.dtb \
-	sdxlemur-rcm-rc.dtb
+	sdxlemur-rcm-rc.dtb \
+	sdxlemur-v2-cdp.dtb \
+	sdxlemur-v2-mtp-mbb.dtb \
+	sdxlemur-v2-mtp-cpe.dtb \
+	sdxlemur-v2-mtp-mbb-emmc.dtb \
+	sdxlemur-v2-mtp-mbb-ntn3-pcie.dtb \
+	sdxlemur-v2-mtp-mbb-pcie-ep.dtb \
+	sdxlemur-v2-mtp-mbb-pcie-rc-ep.dtb \
+	sdxlemur-v2-rcm-pcie-ep.dtb \
+	sdxlemur-v2-rcm-rc.dtb
 
 
 ifeq ($(CONFIG_ARCH_SHIMA), y)
@@ -228,7 +299,22 @@ endif
 
 dtb-$(CONFIG_ARCH_SDXNIGHTJAR) += sdxnightjar-mtp.dtb \
 	sdxnightjar-cdp.dtb \
-	sdxnightjar-qrd.dtb
+	sdxnightjar-qrd.dtb \
+	sdxnightjar-dualwifi-mtp.dtb
+
+ifeq ($(CONFIG_ARCH_YUPIK), y)
+ifeq ($(CONFIG_ARCH_QTI_VM), y)
+dtb-$(CONFIG_ARCH_QTI_VM) += yupik-vm-rumi.dtb \
+	yupik-vm-atp.dtb \
+	yupik-vm-idp.dtb \
+	yupik-vm-qrd.dtb
+endif
+endif
+
+dtb-$(CONFIG_QTI_QUIN_GVM) += sa8155-vm-la.dtb \
+	sa8155-vm-lv.dtb \
+	sa8155-vm-la-mt.dtb \
+	sa8155-vm-lv-mt.dtb
 
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)

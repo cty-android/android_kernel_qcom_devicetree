@@ -1,8 +1,12 @@
 #include "sdxlemur-mtp.dtsi"
-#include "sdxlemur.dtsi"
+#include "sdxlemur-mtp-audio-overlay.dtsi"
 
 &soc {
 
+};
+
+&chosen {
+	bootargs = "reboot=w";
 };
 
 &pcie0 {
@@ -38,4 +42,8 @@
 	ipa_smmu_11ad {
 		qcom,iommu-dma = "bypass";
 	};
+};
+
+&usb {
+	qcom,iommu-dma = "bypass";
 };
